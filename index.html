@@ -244,7 +244,7 @@ details summary{cursor:pointer;font-weight:600}
       + (ev.iban ? riga('IBAN', esc(ev.iban), ev.iban) : '')
       + riga('Causale', esc(r.causale), r.causale)
       + '</div>'
-      + '<p class="note">Preferisci pagare di persona? Passa in agenzia (' + esc(ev.indirizzo) + ') con contanti o carta: basta dire il tuo nome.</p>';
+      + '<p class="note">Preferisci pagare di persona? Passa in agenzia (' + esc(ev.indirizzo) + ') con contanti o carta: basta dire il tuo nome. Il codice sconto ti arriva appena confermiamo il pagamento.</p>';
     c.querySelectorAll('[data-copia]').forEach(function (b) {
       b.onclick = function () {
         var t = b.getAttribute('data-copia');
@@ -305,11 +305,20 @@ details summary{cursor:pointer;font-weight:600}
       if (r && r.evento) brand(r.evento);
       var torna = r && r.token ? '<a class="btn ghost" href="./?e=' + encodeURIComponent(r.token) + '">Torna alla pagina regalo</a>' : '';
       var h;
-      if (r && r.pagato) h = '<div class="ok-ico">💛</div><h2>Pagamento ricevuto, grazie!</h2><p class="sub">La tua quota di ' + eur(r.importo) + ' è confermata. Ti arriverà il tuo codice sconto e la tua dedica è già nel regalo.</p>' + torna;
+      if (r && r.pagato) {
+        var ev2 = r.evento || {};
+        h = '<div class="ok-ico">💛</div><h2>Pagamento ricevuto, grazie!</h2><p class="sub">La tua quota di ' + eur(r.importo) + ' è confermata e la tua dedica è già nel regalo.</p>'
+          + (r.codice ? '<div style="text-align:center;border:2px dashed var(--accent);border-radius:14px;padding:16px;margin:16px 0;background:#fbf8f3"><div class="note">Il tuo regalo: codice sconto</div><div style="font-size:28px;font-weight:700;letter-spacing:2px;margin:4px 0">' + esc(r.codice) + '</div>'
+            + (ev2.codiceImporto ? '<div>' + eur(ev2.codiceImporto) + ' di sconto ' + (ev2.marchio === 'SE' ? 'su pacchetti di viaggio e soggiorni' : 'sulle Super Crociere') + ', prenotazione minima ' + eur(ev2.codiceMinimo) + ', valido ' + ev2.codiceMesi + ' mesi</div>' : '')
+            + '<button class="btn ghost sm" type="button" style="margin-top:10px" data-copia="' + esc(r.codice) + '">Copia il codice</button></div>'
+            + '<p class="note">' + (r.emailInviata ? 'Te l’abbiamo mandato anche per email. ' : '') + 'Fai uno screenshot o salvalo: lo comunichi quando prenoti.</p>' : '')
+          + torna;
+      }
       else if (r && r.giaFatto) h = '<div class="ok-ico">💛</div><h2>Grazie!</h2><p class="sub">Questo pagamento è già stato registrato.</p>';
       else if (ok && r && r.attesa) h = '<div class="ok-ico">⏳</div><h2>Stiamo verificando il pagamento</h2><p class="sub">Ci vuole qualche minuto: appena Viva Wallet lo conferma registriamo la tua quota e ti mandiamo il codice sconto. Non serve ripagare.</p>' + torna;
       else h = '<div class="ok-ico">🙁</div><h2>Pagamento non completato</h2><p class="sub">Nessun addebito è stato fatto. Puoi riprovare oppure scegliere il bonifico.</p>' + torna;
       app.innerHTML = '<main style="margin-top:0"><div class="wrap" style="padding-top:40px"><div class="card">' + h + '</div></div></main>';
+      c_copia();
     }).catch(function (x) { errore(x.message); });
   }
   function errore(t) {
