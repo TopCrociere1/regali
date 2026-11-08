@@ -103,7 +103,8 @@ details summary{cursor:pointer;font-weight:600}
 <div id="app"><div class="load"><div class="spin"></div>Caricamento…</div></div>
 <footer id="foot">
   <b>Sogni ed Emozioni Viaggi</b> · Via Mazzini 134, Battipaglia (SA)<br>
-  sogniedemozioni.it · 0828 304262 &nbsp;|&nbsp; topcrociere.com · 0828 1810125
+  sogniedemozioni.it · 0828 304262 &nbsp;|&nbsp; topcrociere.com · 0828 1810125<br>
+  info@topcrociere.com · <a href="privacy.html">Privacy</a> · <a href="termini.html">Termini e condizioni</a>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
@@ -188,9 +189,9 @@ details summary{cursor:pointer;font-weight:600}
       + '<label class="check"><input type="checkbox" id="anon"> Non mostrare il mio nome al festeggiato</label>'
       + '<label class="check"><input type="checkbox" id="nasc"> Non mostrare l’importo al festeggiato</label>'
       + '<div class="trap" aria-hidden="true"><label>Sito <input type="text" id="sito" tabindex="-1" autocomplete="off"></label></div>'
-      + '<label class="check"><input type="checkbox" id="cons"> <span>Acconsento al trattamento dei miei dati per gestire la quota e ricevere il codice sconto. <a href="#" id="infoPriv">Informativa</a></span></label>'
-      + '<div class="note" id="priv" style="display:none">Titolare: ' + esc(ev.intestatario) + ', ' + esc(ev.indirizzo) + '. Usiamo nome, contatti e dedica solo per registrare la tua quota, mandarti la conferma e il codice sconto, e consegnare le dediche al festeggiato. Non vendiamo né cediamo i dati. Puoi chiederne la cancellazione chiamando il ' + esc(ev.contatti.tel) + '.</div>'
-      + (ev.carta ? '<div><label class="l">Come vuoi pagare?</label><div class="esp" style="margin:0"><label><input type="radio" name="pag" value="carta" checked><div><b>💳 Carta, Apple Pay o Google Pay</b><small>Pagamento sicuro con Viva Wallet, confermato subito</small></div></label><label><input type="radio" name="pag" value="bonifico"><div><b>🏦 Bonifico</b><small>Ti diamo IBAN e causale da usare</small></div></label></div></div>' : '')
+      + '<label class="check"><input type="checkbox" id="cons"> <span>Acconsento al trattamento dei miei dati per gestire la quota e ricevere il codice sconto, e accetto i <a href="termini.html" target="_blank">termini</a>. <a href="#" id="infoPriv">Informativa</a></span></label>'
+      + '<div class="note" id="priv" style="display:none">Titolare: ' + esc(ev.intestatario) + ', ' + esc(ev.indirizzo) + '. Usiamo nome, contatti e dedica solo per registrare la tua quota, mandarti la conferma e il codice sconto, e consegnare le dediche al festeggiato. Non vendiamo né cediamo i dati. Puoi chiederne la cancellazione chiamando il ' + esc(ev.contatti.tel) + '. <a href="privacy.html" target="_blank">Informativa completa</a></div>'
+      + (ev.carta ? '<div><label class="l">Come vuoi pagare?</label><div class="esp" style="margin:0"><label><input type="radio" name="pag" value="carta" checked><div><b>💳 Carta, Apple Pay o Google Pay</b><small>Pagamento sicuro con viva.com, confermato subito</small><img src="viva-logo.svg" alt="viva.com" style="display:block;height:16px;margin-top:6px"></div></label><label><input type="radio" name="pag" value="bonifico"><div><b>🏦 Bonifico</b><small>Ti diamo IBAN e causale da usare</small></div></label></div></div>' : '')
       + '<div class="err" id="err"></div>'
       + '<button class="btn acc full" id="invia" type="submit">Continua</button>'
       + '</form></div>'
