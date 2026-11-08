@@ -190,6 +190,7 @@ details summary{cursor:pointer;font-weight:600}
       + '<div class="trap" aria-hidden="true"><label>Sito <input type="text" id="sito" tabindex="-1" autocomplete="off"></label></div>'
       + '<label class="check"><input type="checkbox" id="cons"> <span>Acconsento al trattamento dei miei dati per gestire la quota e ricevere il codice sconto. <a href="#" id="infoPriv">Informativa</a></span></label>'
       + '<div class="note" id="priv" style="display:none">Titolare: ' + esc(ev.intestatario) + ', ' + esc(ev.indirizzo) + '. Usiamo nome, contatti e dedica solo per registrare la tua quota, mandarti la conferma e il codice sconto, e consegnare le dediche al festeggiato. Non vendiamo né cediamo i dati. Puoi chiederne la cancellazione chiamando il ' + esc(ev.contatti.tel) + '.</div>'
+      + (ev.carta ? '<div><label class="l">Come vuoi pagare?</label><div class="esp" style="margin:0"><label><input type="radio" name="pag" value="carta" checked><div><b>💳 Carta, Apple Pay o Google Pay</b><small>Pagamento sicuro con Viva Wallet, confermato subito</small></div></label><label><input type="radio" name="pag" value="bonifico"><div><b>🏦 Bonifico</b><small>Ti diamo IBAN e causale da usare</small></div></label></div></div>' : '')
       + '<div class="err" id="err"></div>'
       + '<button class="btn acc full" id="invia" type="submit">Continua</button>'
       + '</form></div>'
@@ -213,7 +214,8 @@ details summary{cursor:pointer;font-weight:600}
       var d = {
         nome: $('nome').value.trim(), tel: $('tel').value.trim(), email: $('email').value.trim(), dedica: $('ded').value.trim(),
         importo: espId ? Number(sel.dataset.imp) : Number(String(imp.value).replace(',', '.')), esperienzaId: espId,
-        anonimo: $('anon').checked, nascondiImporto: $('nasc').checked, consenso: $('cons').checked, sito: $('sito').value
+        anonimo: $('anon').checked, nascondiImporto: $('nasc').checked, consenso: $('cons').checked, sito: $('sito').value,
+        pagamento: (form.querySelector('input[name=pag]:checked') || {}).value || 'bonifico'
       };
       var msg = '';
       if (!espId && !(d.importo >= 5)) msg = 'Scegli o scrivi l’importo (almeno 5 €).';
@@ -225,6 +227,7 @@ details summary{cursor:pointer;font-weight:600}
       var bt = $('invia'); bt.disabled = true; bt.textContent = 'Un attimo…';
       chiama({ az: 'partecipa', t: tPub, d: JSON.stringify(d) }).then(function (r) {
         if (!r || !r.ok) throw new Error((r && r.errore) || 'Qualcosa non ha funzionato.');
+        if (r.redirect) { bt.textContent = 'Ti porto al pagamento sicuro…'; location.href = r.redirect; return; }
         pagamento(ev, r, d);
       }).catch(function (x) { err.textContent = x.message; err.style.display = 'block'; bt.disabled = false; bt.textContent = 'Continua'; });
     };
@@ -240,7 +243,7 @@ details summary{cursor:pointer;font-weight:600}
       + (ev.iban ? riga('IBAN', esc(ev.iban), ev.iban) : '')
       + riga('Causale', esc(r.causale), r.causale)
       + '</div>'
-      + '<p class="note">Preferisci pagare di persona? Passa in agenzia (' + esc(ev.indirizzo) + ') con contanti o carta: basta dire il tuo nome.<br>Il pagamento con carta online arriverà presto.</p>';
+      + '<p class="note">Preferisci pagare di persona? Passa in agenzia (' + esc(ev.indirizzo) + ') con contanti o carta: basta dire il tuo nome.</p>';
     c.querySelectorAll('[data-copia]').forEach(function (b) {
       b.onclick = function () {
         var t = b.getAttribute('data-copia');
@@ -293,6 +296,21 @@ details summary{cursor:pointer;font-weight:600}
     });
   }
 
+  /* Ritorno da Viva Wallet */
+  function esito(ok) {
+    var t = (qs.get('t') || '').replace(/[^A-Za-z0-9-]/g, ''), s = (qs.get('s') || '').replace(/[^0-9]/g, '');
+    if (!ok) t = '';
+    chiama({ az: 'vivaesito', t: t, s: s }).then(function (r) {
+      if (r && r.evento) brand(r.evento);
+      var torna = r && r.token ? '<a class="btn ghost" href="./?e=' + encodeURIComponent(r.token) + '">Torna alla pagina regalo</a>' : '';
+      var h;
+      if (r && r.pagato) h = '<div class="ok-ico">💛</div><h2>Pagamento ricevuto, grazie!</h2><p class="sub">La tua quota di ' + eur(r.importo) + ' è confermata. Ti arriverà il tuo codice sconto e la tua dedica è già nel regalo.</p>' + torna;
+      else if (r && r.giaFatto) h = '<div class="ok-ico">💛</div><h2>Grazie!</h2><p class="sub">Questo pagamento è già stato registrato.</p>';
+      else if (ok && r && r.attesa) h = '<div class="ok-ico">⏳</div><h2>Stiamo verificando il pagamento</h2><p class="sub">Ci vuole qualche minuto: appena Viva Wallet lo conferma registriamo la tua quota e ti mandiamo il codice sconto. Non serve ripagare.</p>' + torna;
+      else h = '<div class="ok-ico">🙁</div><h2>Pagamento non completato</h2><p class="sub">Nessun addebito è stato fatto. Puoi riprovare oppure scegliere il bonifico.</p>' + torna;
+      app.innerHTML = '<main style="margin-top:0"><div class="wrap" style="padding-top:40px"><div class="card">' + h + '</div></div></main>';
+    }).catch(function (x) { errore(x.message); });
+  }
   function errore(t) {
     app.innerHTML = '<main style="margin-top:0"><div class="wrap" style="padding-top:40px"><div class="card"><h2>Ops</h2><p class="sub">' + esc(t) + '</p><button class="btn" onclick="location.reload()">Riprova</button></div></div></main>';
   }
@@ -303,7 +321,9 @@ details summary{cursor:pointer;font-weight:600}
 
   if ('serviceWorker' in navigator) window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () { }); });
 
-  if (tPriv) chiama({ az: 'privato', t: tPriv }).then(function (r) { if (r && r.ok) paginaPrivata(r.evento); else errore((r && r.errore) || 'Area non trovata.'); }).catch(function (x) { errore(x.message); });
+  var vw = qs.get('vw');
+  if (vw) esito(vw === 'ok');
+  else if (tPriv) chiama({ az: 'privato', t: tPriv }).then(function (r) { if (r && r.ok) paginaPrivata(r.evento); else errore((r && r.errore) || 'Area non trovata.'); }).catch(function (x) { errore(x.message); });
   else if (tPub) chiama({ az: 'evento', t: tPub }).then(function (r) { if (r && r.ok) paginaPubblica(r.evento); else errore((r && r.errore) || 'Pagina non trovata.'); }).catch(function (x) { errore(x.message); });
   else benvenuto();
 })();
