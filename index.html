@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pagina regalo</title>
+<meta name="description" content="Pagine regalo per compleanni, liste nozze e feste: regala un viaggio con Sogni ed Emozioni e Top Crociere.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#001c54">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#001c54; --navy-2:#0a2a6b; --ink:#14213d; --muted:#5b6478; --line:#e3e6ee;
+  --paper:#fbf8f3; --card:#ffffff; --accent:#e8a33d; --accent-ink:#5a3a00; --ok:#1f7a4d; --bad:#b3261e;
+  --r:18px;
+}
+body.se{ --accent:#f0806a; --accent-ink:#5c1d10; }
+body.tc{ --accent:#4fb3e8; --accent-ink:#06324a; }
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:Montserrat,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--paper);line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:700;line-height:1.15;margin:0}
+a{color:inherit}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+header.top{background:var(--navy);color:#fff}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;padding-top:14px;padding-bottom:14px;gap:12px}
+.brand{font-weight:700;letter-spacing:.02em;font-size:15px}
+.brand small{display:block;font-weight:500;opacity:.75;font-size:12px;letter-spacing:.04em}
+.pill{display:inline-block;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600}
+.hero{background:var(--navy);color:#fff;padding:8px 0 56px;position:relative;overflow:hidden}
+.hero .foto{width:100%;aspect-ratio:16/10;border-radius:var(--r);background:var(--navy-2) center/cover no-repeat;margin:8px 0 22px;box-shadow:0 18px 40px rgba(0,0,0,.25)}
+.hero .occ{color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:12px}
+.hero h1{font-size:clamp(30px,7vw,46px);margin:6px 0 8px}
+.hero .chi{opacity:.85;font-size:15px}
+.hero .msg{font-family:Fraunces,Georgia,serif;font-style:italic;font-size:19px;margin:18px 0 0;opacity:.95;white-space:pre-wrap}
+.stars{position:absolute;inset:0;pointer-events:none;opacity:.25;background-image:radial-gradient(1.5px 1.5px at 20% 30%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 70% 20%,#fff 50%,transparent 51%),radial-gradient(1.5px 1.5px at 85% 60%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 40% 80%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 10% 70%,#fff 50%,transparent 51%)}
+main{margin-top:-34px;position:relative;padding-bottom:40px}
+.card{background:var(--card);border-radius:var(--r);box-shadow:0 6px 24px rgba(20,33,61,.08);padding:22px;margin-bottom:16px;border:1px solid var(--line)}
+.card h2{font-size:23px;margin-bottom:6px}
+.sub{color:var(--muted);font-size:14px;margin:0 0 14px}
+.viaggio{display:flex;gap:12px;align-items:center}
+.viaggio .ico{font-size:28px}
+.bar{height:10px;background:#eef0f5;border-radius:999px;overflow:hidden;margin:10px 0 4px}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:999px;transition:width .8s}
+.esp{display:grid;gap:10px;margin:6px 0 14px}
+.esp label{display:flex;gap:12px;align-items:flex-start;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer;transition:border-color .15s,background .15s}
+.esp label:has(input:checked){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,#fff)}
+.esp input{margin-top:4px;accent-color:var(--navy)}
+.esp b{display:block}
+.esp .imp{margin-left:auto;font-weight:700;white-space:nowrap}
+.esp small{color:var(--muted)}
+.importi{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 10px}
+.importi button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:8px 16px;font:inherit;font-weight:600;cursor:pointer;color:var(--ink)}
+.importi button.on{border-color:var(--navy);background:var(--navy);color:#fff}
+.f{display:grid;gap:12px}
+.f label.l{font-size:13px;font-weight:600;display:block;margin-bottom:4px}
+.f input[type=text],.f input[type=tel],.f input[type=email],.f input[type=number],.f textarea{width:100%;font:inherit;font-size:16px;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+.f input:focus,.f textarea:focus{outline:none;border-color:var(--navy)}
+.f textarea{min-height:96px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.two{grid-template-columns:1fr}}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:14px}
+.check input{margin-top:3px;accent-color:var(--navy);width:18px;height:18px;flex:none}
+.trap{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:14px 24px;font:inherit;font-weight:700;font-size:16px;cursor:pointer;text-decoration:none;background:var(--navy);color:#fff}
+.btn.acc{background:var(--accent);color:var(--accent-ink)}
+.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
+.btn.sm{padding:8px 14px;font-size:14px}
+.btn:disabled{opacity:.6;cursor:wait}
+.full{width:100%}
+.err{background:#fdecea;color:var(--bad);border-radius:12px;padding:10px 14px;font-size:14px;display:none}
+.note{font-size:13px;color:var(--muted)}
+.dati{border:1.5px dashed var(--line);border-radius:14px;padding:4px 14px;margin:12px 0}
+.riga{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.riga:last-child{border-bottom:0}
+.riga span{font-size:12px;color:var(--muted);display:block}
+.riga b{font-size:15px;word-break:break-all}
+.ok-ico{font-size:44px}
+.dedica{border-left:3px solid var(--accent);padding:6px 0 6px 14px;margin:14px 0}
+.dedica p{font-family:Fraunces,Georgia,serif;font-style:italic;font-size:17px;margin:0 0 4px;white-space:pre-wrap}
+.dedica small{color:var(--muted)}
+.tot{display:flex;gap:14px;flex-wrap:wrap}
+.tot div{flex:1;min-width:140px;background:#f4f6fb;border-radius:14px;padding:14px}
+.tot b{font-family:Fraunces,Georgia,serif;font-size:28px;display:block}
+.tot span{font-size:13px;color:var(--muted)}
+#qr{background:#fff;display:inline-block;padding:10px;border-radius:12px;border:1px solid var(--line)}
+#qr img,#qr canvas{display:block;width:200px;height:200px}
+footer{color:var(--muted);font-size:13px;text-align:center;padding:24px 16px 40px}
+footer b{color:var(--ink)}
+details summary{cursor:pointer;font-weight:600}
+.load{text-align:center;padding:80px 16px;color:var(--muted)}
+.spin{width:36px;height:36px;border:3px solid var(--line);border-top-color:var(--navy);border-radius:50%;margin:0 auto 14px;animation:s 1s linear infinite}
+@keyframes s{to{transform:rotate(360deg)}}
+@media print{header.top,.noprint,footer{display:none!important}.hero{background:#fff;color:var(--ink)}main{margin:0}.card{box-shadow:none;border:0}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><div class="brand" id="brand">Sogni ed Emozioni · Top Crociere<small>Pagine regalo</small></div><span class="pill" id="pill">🎁 Regalo</span></div></header>
+<div id="app"><div class="load"><div class="spin"></div>Caricamento…</div></div>
+<footer id="foot">
+  <b>Sogni ed Emozioni Viaggi</b> · Via Mazzini 134, Battipaglia (SA)<br>
+  sogniedemozioni.it · 0828 304262 &nbsp;|&nbsp; topcrociere.com · 0828 1810125
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+(function () {
+  'use strict';
+  var API = 'https://script.google.com/macros/s/AKfycbyU6Gt9vRyP96gRBRWW0Q5qvTLiMh9QbisUCf9G5TaRX-BM7cejqxak-PSduoEpauJXAw/exec';
+  var app = document.getElementById('app');
+  var qs = new URLSearchParams(location.search);
+  var tPub = (qs.get('e') || '').replace(/[^A-Za-z0-9_-]/g, '');
+  var tPriv = (qs.get('p') || '').replace(/[^A-Za-z0-9_-]/g, '');
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function eur(n) { n = Number(n) || 0; return n.toLocaleString('it-IT', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }) + ' €'; }
+  function dataIt(s) { if (!s) return ''; var d = new Date(s); return isNaN(d) ? esc(s) : d.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' }); }
+  function $(id) { return document.getElementById(id); }
+
+  /* Chiamata a TopHub (JSONP: funziona senza problemi di CORS) */
+  function chiama(par) {
+    return new Promise(function (ok, ko) {
+      var cb = 'cb' + Date.now().toString(36) + Math.floor(Math.random() * 1e6);
+      var s = document.createElement('script');
+      var t = setTimeout(function () { pulisci(); ko(new Error('Il collegamento è lento: riprova tra poco.')); }, 25000);
+      function pulisci() { clearTimeout(t); delete window[cb]; s.remove(); }
+      window[cb] = function (r) { pulisci(); ok(r); };
+      var q = new URLSearchParams(par); q.set('regalo', '1'); q.set('callback', cb);
+      s.src = API + '?' + q.toString();
+      s.onerror = function () { pulisci(); ko(new Error('Connessione non riuscita: controlla internet e riprova.')); };
+      document.body.appendChild(s);
+    });
+  }
+
+  function brand(ev) {
+    document.body.className = ev.marchio === 'SE' ? 'se' : 'tc';
+    $('brand').innerHTML = esc(ev.nomeMarchio) + '<small>' + esc(ev.prodotto) + '</small>';
+    $('pill').textContent = '🎁 ' + (ev.occasione || 'Regalo');
+    document.title = (ev.titolo || 'Pagina regalo') + ' · ' + ev.nomeMarchio;
+  }
+
+  function hero(ev) {
+    return '<section class="hero"><div class="stars"></div><div class="wrap">'
+      + (ev.foto ? '<div class="foto" style="background-image:url(\'' + esc(ev.foto) + '\')"></div>' : '<div style="height:24px"></div>')
+      + '<div class="occ">' + esc(ev.occasione) + (ev.dataEvento ? ' · ' + dataIt(ev.dataEvento) : '') + '</div>'
+      + '<h1>' + esc(ev.titolo) + '</h1>'
+      + (ev.festeggiato ? '<div class="chi">Per ' + esc(ev.festeggiato) + '</div>' : '')
+      + (ev.messaggio ? '<p class="msg">“' + esc(ev.messaggio) + '”</p>' : '')
+      + '</div></section>';
+  }
+
+  function cardViaggio(ev) {
+    if (!ev.viaggio && ev.percentuale == null) return '';
+    return '<div class="card">'
+      + (ev.viaggio ? '<div class="viaggio"><div class="ico">✈️</div><div><div class="note">Il viaggio dei sogni</div><h3>' + esc(ev.viaggio) + '</h3>' + (ev.partenza ? '<div class="note">' + esc(ev.partenza) + '</div>' : '') + '</div></div>' : '')
+      + (ev.percentuale != null ? '<div class="bar"><i style="width:' + ev.percentuale + '%"></i></div><div class="note">' + ev.percentuale + '% del regalo già raccolto</div>' : '')
+      + '</div>';
+  }
+
+  /* ---------------- Pagina pubblica ---------------- */
+  function paginaPubblica(ev) {
+    brand(ev);
+    var esp = ev.esperienze || [];
+    var h = hero(ev) + '<main><div class="wrap">' + cardViaggio(ev);
+    if (!ev.aperto) {
+      h += '<div class="card"><h2>La raccolta è chiusa</h2><p class="sub">Grazie di cuore a chi ha partecipato! Per informazioni chiama l’agenzia al ' + esc(ev.contatti.tel) + '.</p></div>';
+      app.innerHTML = h + '</div></main>'; return;
+    }
+    h += '<div class="card" id="cardForm"><h2>Partecipa al regalo</h2><p class="sub">Scegli un’esperienza oppure la cifra che preferisci, e lascia una dedica: la riceverà ' + esc(ev.festeggiato || 'il festeggiato') + '.</p>'
+      + '<form class="f" id="form" novalidate>';
+    if (esp.length) {
+      h += '<div class="esp">' + esp.map(function (x) {
+        return '<label><input type="radio" name="esp" value="' + esc(x.id) + '" data-imp="' + Number(x.importo) + '"><div><b>' + esc(x.titolo) + '</b>' + (x.descrizione ? '<small>' + esc(x.descrizione) + '</small>' : '') + '</div><span class="imp">' + eur(x.importo) + '</span></label>';
+      }).join('') + '<label><input type="radio" name="esp" value="" checked><div><b>Una cifra a mia scelta</b><small>Va nel regalo comune</small></div></label></div>';
+    }
+    h += '<div id="boxImporto"><label class="l" for="imp">Importo</label><div class="importi">'
+      + [30, 50, 100, 150].map(function (n) { return '<button type="button" data-v="' + n + '">' + n + ' €</button>'; }).join('')
+      + '</div><input type="number" id="imp" min="5" max="5000" step="1" inputmode="decimal" placeholder="Altro importo in €"></div>'
+      + '<div><label class="l" for="nome">Nome e cognome</label><input type="text" id="nome" autocomplete="name" maxlength="120" required></div>'
+      + '<div class="two"><div><label class="l" for="tel">Cellulare</label><input type="tel" id="tel" autocomplete="tel" maxlength="20"></div>'
+      + '<div><label class="l" for="email">Email</label><input type="email" id="email" autocomplete="email" maxlength="120"></div></div>'
+      + '<div class="note" style="margin-top:-6px">Almeno uno dei due: ti mandiamo la conferma e il tuo codice sconto.</div>'
+      + '<div><label class="l" for="ded">Dedica (facoltativa)</label><textarea id="ded" maxlength="600" placeholder="Scrivi il tuo augurio…"></textarea></div>'
+      + '<label class="check"><input type="checkbox" id="anon"> Non mostrare il mio nome al festeggiato</label>'
+      + '<label class="check"><input type="checkbox" id="nasc"> Non mostrare l’importo al festeggiato</label>'
+      + '<div class="trap" aria-hidden="true"><label>Sito <input type="text" id="sito" tabindex="-1" autocomplete="off"></label></div>'
+      + '<label class="check"><input type="checkbox" id="cons"> <span>Acconsento al trattamento dei miei dati per gestire la quota e ricevere il codice sconto. <a href="#" id="infoPriv">Informativa</a></span></label>'
+      + '<div class="note" id="priv" style="display:none">Titolare: ' + esc(ev.intestatario) + ', ' + esc(ev.indirizzo) + '. Usiamo nome, contatti e dedica solo per registrare la tua quota, mandarti la conferma e il codice sconto, e consegnare le dediche al festeggiato. Non vendiamo né cediamo i dati. Puoi chiederne la cancellazione chiamando il ' + esc(ev.contatti.tel) + '.</div>'
+      + '<div class="err" id="err"></div>'
+      + '<button class="btn acc full" id="invia" type="submit">Continua</button>'
+      + '</form></div>'
+      + '<div class="card"><h3 style="font-size:19px">🎁 Un regalo anche per te</h3><p class="sub" style="margin:6px 0 0">Chi partecipa riceve un codice sconto di <b>' + eur(ev.codiceImporto) + '</b> ' + (ev.marchio === 'SE' ? 'su pacchetti viaggio e soggiorni' : 'sulle Super Crociere') + ' (spesa minima ' + eur(ev.codiceMinimo) + ', valido ' + ev.codiceMesi + ' mesi).</p></div>'
+      + '</div></main>';
+    app.innerHTML = h;
+
+    var form = $('form'), imp = $('imp'), box = $('boxImporto');
+    $('infoPriv').onclick = function (e) { e.preventDefault(); $('priv').style.display = $('priv').style.display === 'none' ? 'block' : 'none'; };
+    form.querySelectorAll('.importi button').forEach(function (b) {
+      b.onclick = function () { form.querySelectorAll('.importi button').forEach(function (x) { x.classList.remove('on'); }); b.classList.add('on'); imp.value = b.dataset.v; };
+    });
+    imp.oninput = function () { form.querySelectorAll('.importi button').forEach(function (x) { x.classList.toggle('on', x.dataset.v === imp.value); }); };
+    form.querySelectorAll('input[name=esp]').forEach(function (r) { r.onchange = function () { box.style.display = form.querySelector('input[name=esp]:checked').value ? 'none' : ''; }; });
+
+    form.onsubmit = function (e) {
+      e.preventDefault();
+      var err = $('err'); err.style.display = 'none';
+      var sel = form.querySelector('input[name=esp]:checked');
+      var espId = sel ? sel.value : '';
+      var d = {
+        nome: $('nome').value.trim(), tel: $('tel').value.trim(), email: $('email').value.trim(), dedica: $('ded').value.trim(),
+        importo: espId ? Number(sel.dataset.imp) : Number(String(imp.value).replace(',', '.')), esperienzaId: espId,
+        anonimo: $('anon').checked, nascondiImporto: $('nasc').checked, consenso: $('cons').checked, sito: $('sito').value
+      };
+      var msg = '';
+      if (!espId && !(d.importo >= 5)) msg = 'Scegli o scrivi l’importo (almeno 5 €).';
+      else if (!d.nome) msg = 'Scrivi il tuo nome.';
+      else if (!d.tel && !d.email) msg = 'Lascia il cellulare o l’email.';
+      else if (d.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email)) msg = 'Controlla l’email.';
+      else if (!d.consenso) msg = 'Serve il consenso per registrare la quota.';
+      if (msg) { err.textContent = msg; err.style.display = 'block'; return; }
+      var bt = $('invia'); bt.disabled = true; bt.textContent = 'Un attimo…';
+      chiama({ az: 'partecipa', t: tPub, d: JSON.stringify(d) }).then(function (r) {
+        if (!r || !r.ok) throw new Error((r && r.errore) || 'Qualcosa non ha funzionato.');
+        pagamento(ev, r, d);
+      }).catch(function (x) { err.textContent = x.message; err.style.display = 'block'; bt.disabled = false; bt.textContent = 'Continua'; });
+    };
+  }
+
+  function pagamento(ev, r, d) {
+    var c = $('cardForm');
+    c.innerHTML = '<div class="ok-ico">💛</div><h2>Grazie ' + esc(d.nome.split(' ')[0]) + '!</h2>'
+      + '<p class="sub">La tua quota è registrata. Per completarla fai il bonifico con questi dati: appena arriva la confermiamo e ti mandiamo il codice sconto.</p>'
+      + '<div class="dati">'
+      + riga('Importo', eur(r.importo), String(r.importo).replace('.', ','))
+      + riga('Intestato a', esc(ev.intestatario), ev.intestatario)
+      + (ev.iban ? riga('IBAN', esc(ev.iban), ev.iban) : '')
+      + riga('Causale', esc(r.causale), r.causale)
+      + '</div>'
+      + '<p class="note">Preferisci pagare di persona? Passa in agenzia (' + esc(ev.indirizzo) + ') con contanti o carta: basta dire il tuo nome.<br>Il pagamento con carta online arriverà presto.</p>';
+    c.querySelectorAll('[data-copia]').forEach(function (b) {
+      b.onclick = function () {
+        var t = b.getAttribute('data-copia');
+        (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { b.textContent = 'Copiato ✓'; }, function () { prompt('Copia:', t); });
+      };
+    });
+    c.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function riga(et, val, copia) {
+    return '<div class="riga"><div><span>' + et + '</span><b>' + val + '</b></div><button class="btn ghost sm" type="button" data-copia="' + esc(copia) + '">Copia</button></div>';
+  }
+
+  /* ---------------- Area riservata del festeggiato ---------------- */
+  function paginaPrivata(ev) {
+    brand(ev);
+    var q = ev.quote || [];
+    var h = hero(ev) + '<main><div class="wrap">'
+      + '<div class="card"><h2>La tua area riservata</h2><p class="sub">Solo tu vedi questa pagina: non condividere questo link. Agli invitati manda il link della pagina regalo qui sotto.</p>'
+      + '<div class="tot"><div><b>' + eur(ev.raccolto) + '</b><span>raccolti finora</span></div><div><b>' + q.length + '</b><span>' + (q.length === 1 ? 'partecipazione' : 'partecipazioni') + '</span></div>'
+      + (ev.obiettivo > 0 ? '<div><b>' + (ev.percentuale || 0) + '%</b><span>dell’obiettivo di ' + eur(ev.obiettivo) + '</span></div>' : '') + '</div>'
+      + (ev.obiettivo > 0 ? '<div class="bar"><i style="width:' + (ev.percentuale || 0) + '%"></i></div>' : '')
+      + (ev.codiceBuono ? '<p class="note" style="margin-top:12px">Il tuo buono vacanza: <b>' + esc(ev.codiceBuono) + '</b></p>' : '')
+      + '</div>'
+      + '<div class="card noprint"><h2>Condividi la pagina regalo</h2><p class="sub">Mandala su WhatsApp o stampa il QR sul biglietto d’invito.</p>'
+      + '<div class="dati">' + riga('Link per gli invitati', esc(ev.linkPubblico), ev.linkPubblico) + '</div>'
+      + '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px"><a class="btn acc" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent('Partecipa al mio regalo 🎁 ' + ev.linkPubblico) + '">💬 Condividi su WhatsApp</a>'
+      + (navigator.share ? '<button class="btn ghost" id="share" type="button">Altre app</button>' : '') + '</div>'
+      + '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><div id="qr"></div><div><a class="btn ghost sm" id="qrDl" download="qr-regalo.png" href="#">Scarica il QR</a><p class="note" style="max-width:260px">Stampalo sull’invito o sul biglietto: inquadrandolo si apre la pagina regalo.</p></div></div></div>'
+      + '<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h2>Le dediche</h2>' + (q.length ? '<button class="btn ghost sm noprint" onclick="window.print()" type="button">Stampa</button>' : '') + '</div>'
+      + (q.length ? q.map(function (x) {
+        return '<div class="dedica">' + (x.dedica ? '<p>“' + esc(x.dedica) + '”</p>' : '') + '<small><b>' + esc(x.nome) + '</b>' + (x.esperienza ? ' · ' + esc(x.esperienza) : '') + (x.importo != null ? ' · ' + eur(x.importo) : '') + (x.data ? ' · ' + dataIt(x.data) : '') + '</small></div>';
+      }).join('') : '<p class="sub">Ancora nessuna partecipazione confermata. Le quote compaiono qui appena l’agenzia le conferma.</p>')
+      + '</div></div></main>';
+    app.innerHTML = h;
+    c_copia();
+    if ($('share')) $('share').onclick = function () { navigator.share({ title: ev.titolo, text: 'Partecipa al mio regalo 🎁', url: ev.linkPubblico }).catch(function () { }); };
+    if (window.qrcode) {
+      var qr = qrcode(0, 'M'); qr.addData(ev.linkPubblico); qr.make();
+      var url = qr.createDataURL(8, 16);
+      $('qr').innerHTML = '<img alt="QR della pagina regalo" src="' + url + '">';
+      $('qrDl').href = url;
+    } else { $('qrDl').style.display = 'none'; $('qr').style.display = 'none'; }
+  }
+  function c_copia() {
+    document.querySelectorAll('[data-copia]').forEach(function (b) {
+      b.onclick = function () {
+        var t = b.getAttribute('data-copia');
+        (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { b.textContent = 'Copiato ✓'; }, function () { prompt('Copia:', t); });
+      };
+    });
+  }
+
+  function errore(t) {
+    app.innerHTML = '<main style="margin-top:0"><div class="wrap" style="padding-top:40px"><div class="card"><h2>Ops</h2><p class="sub">' + esc(t) + '</p><button class="btn" onclick="location.reload()">Riprova</button></div></div></main>';
+  }
+  function benvenuto() {
+    app.innerHTML = '<section class="hero" style="padding-bottom:70px"><div class="stars"></div><div class="wrap" style="padding-top:30px"><div class="occ">Liste regalo · compleanni · matrimoni · lauree</div><h1>Regala un viaggio, insieme.</h1><p class="msg">Crea la tua pagina regalo in agenzia: amici e parenti partecipano con una quota, tu ricevi il buono vacanza.</p></div></section>'
+      + '<main><div class="wrap"><div class="card"><h2>Come funziona</h2><p class="sub" style="margin:0">1. Passa in agenzia o chiamaci: creiamo la tua pagina.<br>2. Condividi il link o il QR con gli invitati.<br>3. Le quote diventano il tuo buono vacanza, con tutte le dediche.</p></div></div></main>';
+  }
+
+  if ('serviceWorker' in navigator) window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () { }); });
+
+  if (tPriv) chiama({ az: 'privato', t: tPriv }).then(function (r) { if (r && r.ok) paginaPrivata(r.evento); else errore((r && r.errore) || 'Area non trovata.'); }).catch(function (x) { errore(x.message); });
+  else if (tPub) chiama({ az: 'evento', t: tPub }).then(function (r) { if (r && r.ok) paginaPubblica(r.evento); else errore((r && r.errore) || 'Pagina non trovata.'); }).catch(function (x) { errore(x.message); });
+  else benvenuto();
+})();
+</script>
+</body>
+</html>
