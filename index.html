@@ -110,6 +110,14 @@ details summary{cursor:pointer;font-weight:600}
 .gm .g button{position:absolute;border:0;border-radius:8px;background:rgba(0,0,0,.62);color:#fff;font-size:12px;line-height:22px;padding:0 7px;cursor:pointer}
 .gm .g .gx{top:4px;right:4px}.gm .g .gp{bottom:4px;left:4px}
 .gm .g .tag{position:absolute;bottom:4px;left:4px;background:var(--accent);color:#fff;font-size:11px;font-weight:700;border-radius:6px;padding:1px 6px}
+.codice{font-family:Fraunces,Georgia,serif;font-size:34px;letter-spacing:2px;background:#f4f6fb;border:2px dashed var(--accent);border-radius:14px;padding:10px 18px;display:inline-block;margin:6px 0 12px}
+.pren{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.pren:last-child{border-bottom:0}
+.pren small{display:block;color:var(--muted);font-size:12px}
+.st{font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;white-space:nowrap;align-self:center}
+.st.ok{background:#e3f6ea;color:#1c7a3e}.st.at{background:#fff3df;color:#9a5b00}
+ol.passi{margin:0;padding-left:20px;line-height:1.6}
+.app header.top,.app footer{display:none}
 @media print{header.top,.noprint,footer{display:none!important}.hero{background:#fff;color:var(--ink)}main{margin:0}.card{box-shadow:none;border:0}}
 </style>
 </head>
@@ -131,6 +139,8 @@ details summary{cursor:pointer;font-weight:600}
   var qs = new URLSearchParams(location.search);
   var tPub = (qs.get('e') || '').replace(/[^A-Za-z0-9_-]/g, '');
   var tPriv = (qs.get('p') || '').replace(/[^A-Za-z0-9_-]/g, '');
+  var tAmico = (qs.get('a') || '').replace(/[^A-Za-z0-9_-]/g, '');
+  if (qs.get('app') === '1') document.documentElement.classList.add('app');
 
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function eur(n) { n = Number(n) || 0; return n.toLocaleString('it-IT', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }) + ' €'; }
@@ -431,6 +441,60 @@ details summary{cursor:pointer;font-weight:600}
       c_copia();
     }).catch(function (x) { errore(x.message); });
   }
+
+  /* ---------------- Area del promotore "Porta un amico" (09/11/2026) ---------------- */
+  function paginaAmico(a) {
+    document.body.className = 'tc' + (document.documentElement.classList.contains('app') ? ' app' : '');
+    $('brand').innerHTML = 'Top Crociere<small>Porta un amico</small>';
+    $('pill').textContent = '👥 Porta un amico';
+    document.title = 'Porta un amico · Top Crociere';
+    var msgWa = 'Ciao! Ho viaggiato con Top Crociere e mi sono trovato benissimo 🛳️ Se stai pensando a una crociera contattali: ' + a.telAgenzia + ' o ' + a.sito + '. Quando prenoti di’ che ti mando io e dai il mio codice: ' + a.codice;
+    var fatte = a.maturate % a.premioOgni, perc = Math.round(fatte / a.premioOgni * 100);
+    var h = '<section class="hero"><div class="stars"></div><div class="wrap" style="padding-top:26px">'
+      + '<div class="occ">Porta un amico · Top Crociere</div>'
+      + '<h1>Ciao' + (a.nome ? ' ' + esc(a.nome) : '') + '!</h1>'
+      + '<p class="msg">Consiglia Top Crociere ai tuoi amici: per ogni amico che prenota con il tuo codice guadagni il ' + esc(String(a.perc).replace('.', ',')) + '% e ogni ' + a.premioOgni + ' prenotazioni un premio di ' + eur(a.premioEuro) + '.</p>'
+      + '</div></section><main><div class="wrap">'
+      + '<div class="card"><h2>Il tuo codice</h2><div class="codice">' + esc(a.codice) + '</div>'
+      + '<p class="sub" style="margin-top:0">Gli amici lo dicono all’agenzia quando prenotano. Mandalo con un messaggio già pronto:</p>'
+      + '<div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn acc" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(msgWa) + '">💬 Condividi su WhatsApp</a>'
+      + (navigator.share ? '<button class="btn ghost" id="amShare" type="button">Altre app</button>' : '')
+      + '<button class="btn ghost" id="amCopia" type="button">Copia il messaggio</button></div></div>'
+      + '<div class="card"><h2>I tuoi bonus</h2><div class="tot">'
+      + '<div><b>' + eur(a.bonusMaturato) + '</b><span>maturati (saldo pagato)</span></div>'
+      + '<div><b>' + eur(a.bonusAttesa) + '</b><span>in arrivo (in attesa del saldo)</span></div>'
+      + '<div><b>' + a.portate + '</b><span>amici che hanno prenotato</span></div></div>'
+      + '<div class="bar"><i style="width:' + perc + '%"></i></div>'
+      + '<div class="note">' + fatte + ' su ' + a.premioOgni + ' prenotazioni saldate: ne mancano ' + a.mancano + ' per il premio di ' + eur(a.premioEuro) + (a.premi ? ' (premi già ottenuti: ' + a.premi + ')' : '') + '.</div>'
+      + '<div style="margin-top:16px"><button class="btn acc" id="amBuono" type="button"' + (a.bonusMaturato > 0 ? '' : ' disabled') + '>🎁 Trasforma in buono vacanza</button>'
+      + '<p class="note" id="amEsito">' + (a.richiesta ? 'Richiesta inviata il ' + esc(a.richiesta) + ': ti contattiamo noi.' : (a.bonusMaturato > 0 ? 'Il buono vacanza vale 12 mesi su crociere e viaggi. Lo prepariamo noi e ti avvisiamo.' : 'Il tasto si attiva quando hai bonus maturati.')) + '</p></div></div>'
+      + '<div class="card"><h2>Le prenotazioni dei tuoi amici</h2>'
+      + (a.prenotazioni.length ? a.prenotazioni.map(function (x) {
+        return '<div class="pren"><div>' + esc(x.partenza || 'Prenotazione') + (x.data ? '<small>Aggiornata il ' + esc(x.data) + '</small>' : '') + '</div>'
+          + '<div style="text-align:right"><b>' + eur(x.importo) + '</b><br><span class="st ' + (x.maturata ? 'ok">Maturato' : 'at">In attesa del saldo') + '</span></div></div>';
+      }).join('') : '<p class="sub" style="margin:0">Ancora nessuna: appena un amico prenota con il tuo codice la trovi qui.</p>')
+      + '</div>'
+      + '<div class="card"><h2>Come funziona</h2><ol class="passi">'
+      + '<li>Condividi il tuo codice con amici e parenti.</li>'
+      + '<li>L’amico prenota con Top Crociere e dice il tuo codice.</li>'
+      + '<li>Quando l’amico ha pagato il saldo maturi il ' + esc(String(a.perc).replace('.', ',')) + '% della prenotazione; ogni ' + a.premioOgni + ' prenotazioni saldate ricevi in più ' + eur(a.premioEuro) + '.</li>'
+      + '<li>Trasformi i bonus in un buono vacanza da usare per il tuo prossimo viaggio.</li></ol>'
+      + '<p class="note">Domande? Chiamaci al ' + esc(a.telAgenzia) + '.</p></div>'
+      + '</div></main>';
+    app.innerHTML = h;
+    $('amCopia').onclick = function () {
+      var b = this;
+      (navigator.clipboard ? navigator.clipboard.writeText(msgWa) : Promise.reject()).then(function () { b.textContent = 'Copiato ✓'; }, function () { prompt('Copia:', msgWa); });
+    };
+    if ($('amShare')) $('amShare').onclick = function () { navigator.share({ text: msgWa }).catch(function () { }); };
+    $('amBuono').onclick = function () {
+      var b = this; b.disabled = true; $('amEsito').textContent = 'Invio la richiesta…';
+      chiama({ az: 'amicoBuono', t: tAmico }).then(function (r) {
+        if (r && r.ok) $('amEsito').textContent = r.gia ? 'Hai già inviato la richiesta: ti contattiamo noi a breve.' : 'Richiesta inviata ✓ Prepariamo il tuo buono vacanza e ti contattiamo.';
+        else { b.disabled = false; $('amEsito').textContent = (r && r.errore) || 'Non riuscito: riprova.'; }
+      }).catch(function (x) { b.disabled = false; $('amEsito').textContent = x.message; });
+    };
+  }
   function errore(t) {
     app.innerHTML = '<main style="margin-top:0"><div class="wrap" style="padding-top:40px"><div class="card"><h2>Ops</h2><p class="sub">' + esc(t) + '</p><button class="btn" onclick="location.reload()">Riprova</button></div></div></main>';
   }
@@ -443,6 +507,7 @@ details summary{cursor:pointer;font-weight:600}
 
   var vw = qs.get('vw');
   if (vw) esito(vw === 'ok');
+  else if (tAmico) chiama({ az: 'amico', t: tAmico }).then(function (r) { if (r && r.ok) paginaAmico(r.amico); else errore((r && r.errore) || 'Pagina non trovata.'); }).catch(function (x) { errore(x.message); });
   else if (tPriv) chiama({ az: 'privato', t: tPriv }).then(function (r) { if (r && r.ok) paginaPrivata(r.evento); else errore((r && r.errore) || 'Area non trovata.'); }).catch(function (x) { errore(x.message); });
   else if (tPub) chiama({ az: 'evento', t: tPub }).then(function (r) { if (r && r.ok) paginaPubblica(r.evento); else errore((r && r.errore) || 'Pagina non trovata.'); }).catch(function (x) { errore(x.message); });
   else benvenuto();
