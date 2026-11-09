@@ -95,6 +95,21 @@ details summary{cursor:pointer;font-weight:600}
 .load{text-align:center;padding:80px 16px;color:var(--muted)}
 .spin{width:36px;height:36px;border:3px solid var(--line);border-top-color:var(--navy);border-radius:50%;margin:0 auto 14px;animation:s 1s linear infinite}
 @keyframes s{to{transform:rotate(360deg)}}
+.strip{display:flex;gap:8px;overflow-x:auto;margin:-10px 0 18px;padding-bottom:4px;scrollbar-width:thin}
+.strip button,.destgal button{flex:0 0 auto;border:0;padding:0;cursor:zoom-in;border-radius:12px;background:var(--navy-2) center/cover no-repeat}
+.strip button{width:92px;height:64px;box-shadow:0 6px 16px rgba(0,0,0,.25)}
+.destgal{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:14px}
+.destgal button{width:100%;aspect-ratio:4/3}
+.lb{position:fixed;inset:0;background:rgba(8,12,24,.92);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
+.lb img{max-width:100%;max-height:86vh;border-radius:10px}
+.lb .x,.lb .nav{position:absolute;border:0;background:rgba(255,255,255,.15);color:#fff;font-size:22px;width:44px;height:44px;border-radius:50%;cursor:pointer}
+.lb .x{top:14px;right:14px}.lb .p{left:10px;top:50%}.lb .n{right:10px;top:50%}
+.gm{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 12px}
+.gm .g{position:relative;width:104px;height:78px;border-radius:12px;background:#eef0f5 center/cover no-repeat;border:2.5px solid transparent}
+.gm .g.prima{border-color:var(--accent)}
+.gm .g button{position:absolute;border:0;border-radius:8px;background:rgba(0,0,0,.62);color:#fff;font-size:12px;line-height:22px;padding:0 7px;cursor:pointer}
+.gm .g .gx{top:4px;right:4px}.gm .g .gp{bottom:4px;left:4px}
+.gm .g .tag{position:absolute;bottom:4px;left:4px;background:var(--accent);color:#fff;font-size:11px;font-weight:700;border-radius:6px;padding:1px 6px}
 @media print{header.top,.noprint,footer{display:none!important}.hero{background:#fff;color:var(--ink)}main{margin:0}.card{box-shadow:none;border:0}}
 </style>
 </head>
@@ -146,7 +161,8 @@ details summary{cursor:pointer;font-weight:600}
 
   function hero(ev) {
     return '<section class="hero"><div class="stars"></div><div class="wrap">'
-      + (ev.foto ? '<div class="foto" style="background-image:url(\'' + esc(ev.foto) + '\')"></div>' : '<div style="height:24px"></div>')
+      + (ev.foto ? '<div class="foto" style="background-image:url(\'' + esc(ev.foto) + '\')"' + ((ev.galleria || []).length ? ' data-lb="g" data-i="0" role="button" tabindex="0"' : '') + '></div>' : '<div style="height:24px"></div>')
+      + ((ev.galleria || []).length > 1 ? '<div class="strip noprint">' + ev.galleria.slice(1).map(function (u, i) { return '<button type="button" data-lb="g" data-i="' + (i + 1) + '" aria-label="Apri la foto" style="background-image:url(\'' + esc(u) + '\')"></button>'; }).join('') + '</div>' : '')
       + '<div class="occ">' + esc(ev.occasione) + (ev.dataEvento ? ' · ' + dataIt(ev.dataEvento) : '') + '</div>'
       + '<h1>' + esc(ev.titolo) + '</h1>'
       + (ev.festeggiato ? '<div class="chi">Per ' + esc(ev.festeggiato) + '</div>' : '')
@@ -155,16 +171,40 @@ details summary{cursor:pointer;font-weight:600}
   }
 
   function cardViaggio(ev) {
-    if (!ev.viaggio && ev.percentuale == null) return '';
+    if (!ev.viaggio && ev.percentuale == null && !(ev.fotoDest || []).length) return '';
     return '<div class="card">'
       + (ev.viaggio ? '<div class="viaggio"><div class="ico">✈️</div><div><div class="note">Il viaggio dei sogni</div><h3>' + esc(ev.viaggio) + '</h3>' + (ev.partenza ? '<div class="note">' + esc(ev.partenza) + '</div>' : '') + '</div></div>' : '')
+      + ((ev.fotoDest || []).length ? '<div class="destgal">' + ev.fotoDest.map(function (u, i) { return '<button type="button" data-lb="d" data-i="' + i + '" aria-label="Apri la foto della destinazione" style="background-image:url(\'' + esc(u) + '\')"></button>'; }).join('') + '</div>' : '')
       + (ev.percentuale != null ? '<div class="bar"><i style="width:' + ev.percentuale + '%"></i></div><div class="note">' + ev.percentuale + '% del regalo già raccolto</div>' : '')
       + '</div>';
   }
 
+  /* ---------------- Foto: ingrandimento ---------------- */
+  var LB_EV = null;
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-lb]'); if (!b || !LB_EV) return;
+    var lista = b.getAttribute('data-lb') === 'd' ? (LB_EV.fotoDest || []) : (LB_EV.galleria || []);
+    apriLb(lista, Number(b.getAttribute('data-i')) || 0);
+  });
+  function apriLb(lista, i) {
+    if (!lista.length) return;
+    var d = document.createElement('div'); d.className = 'lb';
+    d.innerHTML = '<img alt="Foto">' + '<button class="x" type="button" aria-label="Chiudi">✕</button>' + (lista.length > 1 ? '<button class="nav p" type="button" aria-label="Precedente">‹</button><button class="nav n" type="button" aria-label="Successiva">›</button>' : '');
+    function mostra() { d.querySelector('img').src = lista[i]; }
+    function chiudi() { d.remove(); document.removeEventListener('keydown', tasti); }
+    function tasti(e) { if (e.key === 'Escape') chiudi(); if (e.key === 'ArrowRight') { i = (i + 1) % lista.length; mostra(); } if (e.key === 'ArrowLeft') { i = (i - 1 + lista.length) % lista.length; mostra(); } }
+    d.onclick = function (e) {
+      if (e.target.classList.contains('n')) { i = (i + 1) % lista.length; mostra(); }
+      else if (e.target.classList.contains('p')) { i = (i - 1 + lista.length) % lista.length; mostra(); }
+      else if (e.target.tagName !== 'IMG') chiudi();
+    };
+    document.addEventListener('keydown', tasti);
+    document.body.appendChild(d); mostra();
+  }
+
   /* ---------------- Pagina pubblica ---------------- */
   function paginaPubblica(ev) {
-    brand(ev);
+    brand(ev); LB_EV = ev;
     var esp = ev.esperienze || [];
     var h = hero(ev) + '<main><div class="wrap">' + cardViaggio(ev);
     if (!ev.aperto) {
@@ -259,7 +299,7 @@ details summary{cursor:pointer;font-weight:600}
 
   /* ---------------- Area riservata del festeggiato ---------------- */
   function paginaPrivata(ev) {
-    brand(ev);
+    brand(ev); LB_EV = ev; EV_PRIV = ev;
     var q = ev.quote || [];
     var h = hero(ev) + '<main><div class="wrap">'
       + '<div class="card"><h2>La tua area riservata</h2><p class="sub">Solo tu vedi questa pagina: non condividere questo link. Agli invitati manda il link della pagina regalo qui sotto.</p>'
@@ -273,13 +313,14 @@ details summary{cursor:pointer;font-weight:600}
       + '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px"><a class="btn acc" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent('Partecipa al mio regalo 🎁 ' + ev.linkPubblico) + '">💬 Condividi su WhatsApp</a>'
       + (navigator.share ? '<button class="btn ghost" id="share" type="button">Altre app</button>' : '') + '</div>'
       + '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><div id="qr"></div><div><a class="btn ghost sm" id="qrDl" download="qr-regalo.png" href="#">Scarica il QR</a><p class="note" style="max-width:260px">Stampalo sull’invito o sul biglietto: inquadrandolo si apre la pagina regalo.</p></div></div></div>'
+      + cardFoto(ev)
       + '<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h2>Le dediche</h2>' + (q.length ? '<button class="btn ghost sm noprint" onclick="window.print()" type="button">Stampa</button>' : '') + '</div>'
       + (q.length ? q.map(function (x) {
         return '<div class="dedica">' + (x.dedica ? '<p>“' + esc(x.dedica) + '”</p>' : '') + '<small><b>' + esc(x.nome) + '</b>' + (x.esperienza ? ' · ' + esc(x.esperienza) : '') + (x.importo != null ? ' · ' + eur(x.importo) : '') + (x.data ? ' · ' + dataIt(x.data) : '') + '</small></div>';
       }).join('') : '<p class="sub">Ancora nessuna partecipazione confermata. Le quote compaiono qui appena l’agenzia le conferma.</p>')
       + '</div></div></main>';
     app.innerHTML = h;
-    c_copia();
+    c_copia(); attivaFoto();
     if ($('share')) $('share').onclick = function () { navigator.share({ title: ev.titolo, text: 'Partecipa al mio regalo 🎁', url: ev.linkPubblico }).catch(function () { }); };
     if (window.qrcode) {
       var qr = qrcode(0, 'M'); qr.addData(ev.linkPubblico); qr.make();
@@ -288,6 +329,75 @@ details summary{cursor:pointer;font-weight:600}
       $('qrDl').href = url;
     } else { $('qrDl').style.display = 'none'; $('qr').style.display = 'none'; }
   }
+  /* ---------------- Foto: gestione del festeggiato ---------------- */
+  var EV_PRIV = null, FOTO_TIPO = 'gal';
+  function cardFoto(ev) {
+    var aperto = ev.aperto !== false && ev.stato !== 'Chiuso';
+    var gal = ev.galleriaGest || [], dest = ev.fotoDestGest || [];
+    function g(f, i, tipo) {
+      return '<div class="g' + (tipo === 'gal' && i === 0 ? ' prima' : '') + '" style="background-image:url(\'' + esc(f.url) + '\')">'
+        + (aperto ? '<button class="gx" type="button" data-togli="' + esc(f.id) + '" aria-label="Togli la foto">✕</button>' : '')
+        + (tipo === 'gal' && i === 0 ? '<span class="tag">Principale</span>' : (tipo === 'gal' && aperto ? '<button class="gp" type="button" data-prima="' + esc(f.id) + '">★ Principale</button>' : ''))
+        + '</div>';
+    }
+    return '<div class="card noprint" id="cardFoto"><h2>Le foto della tua pagina</h2><p class="sub">Le ha messe l’agenzia: puoi cambiarle come vuoi. La foto “Principale” è quella grande in alto.</p>'
+      + '<div class="gm">' + (gal.map(function (f, i) { return g(f, i, 'gal'); }).join('') || '<span class="note">Nessuna foto.</span>') + '</div>'
+      + (aperto ? '<button class="btn ghost sm" type="button" data-agg="gal">+ Aggiungi foto</button>' : '')
+      + '<h3 style="font-size:17px;margin-top:18px">🌍 Foto della destinazione</h3>'
+      + '<div class="gm">' + (dest.map(function (f, i) { return g(f, i, 'dest'); }).join('') || '<span class="note">Nessuna foto.</span>') + '</div>'
+      + (aperto ? '<button class="btn ghost sm" type="button" data-agg="dest">+ Aggiungi foto della destinazione</button>' : '')
+      + '<input type="file" id="fileFoto" accept="image/*" multiple hidden>'
+      + '<div class="note" id="fotoMsg" style="margin-top:10px"></div></div>';
+  }
+  function invia(corpo) {
+    corpo.regalo = 1; corpo.t = tPriv;
+    return fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(corpo) })
+      .then(function (r) { return r.json(); }, function () { throw new Error('Connessione non riuscita: controlla internet e riprova.'); })
+      .then(function (r) { if (!r || !r.ok) throw new Error((r && r.errore) || 'Qualcosa non ha funzionato.'); return r; });
+  }
+  function rimpicciolisci(file) {
+    return new Promise(function (ok, ko) {
+      var img = new Image(), u = URL.createObjectURL(file);
+      img.onload = function () {
+        var max = 1600, w = img.naturalWidth, h = img.naturalHeight, k = Math.min(1, max / Math.max(w, h));
+        var c = document.createElement('canvas'); c.width = Math.round(w * k); c.height = Math.round(h * k);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(u);
+        ok(c.toDataURL('image/jpeg', 0.85).split(',')[1]);
+      };
+      img.onerror = function () { URL.revokeObjectURL(u); ko(new Error('Questa foto non si riesce ad aprire: prova con un JPG o PNG.')); };
+      img.src = u;
+    });
+  }
+  function aggiornaFoto(r) {
+    EV_PRIV.galleriaGest = r.galleria || []; EV_PRIV.fotoDestGest = r.fotoDest || [];
+    EV_PRIV.galleria = EV_PRIV.galleriaGest.map(function (f) { return f.url; }); EV_PRIV.fotoDest = EV_PRIV.fotoDestGest.map(function (f) { return f.url; });
+    EV_PRIV.foto = EV_PRIV.galleria[0] || '';
+    var y = window.scrollY; paginaPrivata(EV_PRIV); window.scrollTo(0, y);
+  }
+  function attivaFoto() {
+    var c = $('cardFoto'); if (!c) return;
+    var m = $('fotoMsg');
+    function errore(x) { m.style.color = '#b42318'; m.textContent = x.message; }
+    c.onclick = function (e) {
+      var a = e.target.closest('[data-agg]'), t = e.target.closest('[data-togli]'), p = e.target.closest('[data-prima]');
+      if (a) { FOTO_TIPO = a.getAttribute('data-agg'); $('fileFoto').value = ''; $('fileFoto').click(); }
+      else if (t) { if (!confirm('Togliere questa foto?')) return; m.style.color = ''; m.textContent = 'Un attimo…'; invia({ az: 'togliFoto', fotoId: t.getAttribute('data-togli') }).then(aggiornaFoto).catch(errore); }
+      else if (p) { m.style.color = ''; m.textContent = 'Un attimo…'; invia({ az: 'primaFoto', fotoId: p.getAttribute('data-prima') }).then(aggiornaFoto).catch(errore); }
+    };
+    $('fileFoto').onchange = function () {
+      var files = [].slice.call($('fileFoto').files), k = 0, ultimo = null;
+      if (!files.length) return;
+      c.querySelectorAll('button').forEach(function (b) { b.disabled = true; });
+      (function prossima() {
+        if (k >= files.length) { if (ultimo) aggiornaFoto(ultimo); return; }
+        m.style.color = ''; m.textContent = 'Carico la foto ' + (k + 1) + ' di ' + files.length + '…';
+        rimpicciolisci(files[k]).then(function (b64) { return invia({ az: 'foto', tipo: FOTO_TIPO, mime: 'image/jpeg', base64: b64 }); })
+          .then(function (r) { ultimo = r; k++; prossima(); })
+          .catch(function (x) { if (ultimo) aggiornaFoto(ultimo); setTimeout(function () { var mm = $('fotoMsg'); if (mm) { mm.style.color = '#b42318'; mm.textContent = x.message; } c.querySelectorAll('button').forEach(function (b) { b.disabled = false; }); }, 0); });
+      })();
+    };
+  }
+
   function c_copia() {
     document.querySelectorAll('[data-copia]').forEach(function (b) {
       b.onclick = function () {
